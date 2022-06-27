@@ -7,6 +7,15 @@
     <string name="share_counter">5</string>
     <string name="view_counter" translatable="false">500</string>
     <string name="like_counter" translatable="false">10</string>
-    <string name="post_title" translatable="false">Нетология. Университет интеренет-профессий</string>
+    <string name="post_title" translatable="false">Нетология. Университет интернет-профессий</string>
     <string name="post_link">http://netolo.gy/fyb</string>
+    <string name="title_activity_main_plain">MainActivityPlain</string>
+    <!-- Strings used for fragments for navigation -->
+    <string name="first_fragment_label">First Fragment</string>
+    <string name="second_fragment_label">Second Fragment</string>
+    <string name="next">Next</string>
+    <string name="previous">Previous</string>
+
+    <string name="hello_first_fragment">Hello first fragment</string>
+    <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
 </resources>
