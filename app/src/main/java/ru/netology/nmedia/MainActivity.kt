@@ -2,13 +2,17 @@ package ru.netology.nmedia
 
 import android.os.Build
 import android.os.Bundle
+import androidx.activity.viewModels
 import androidx.annotation.DrawableRes
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import ru.netology.nmedia.databinding.ActivityMainBinding
+import ru.netology.nmedia.viewModel.PostViewModel
 
 @RequiresApi(Build.VERSION_CODES.R)
 class MainActivity : AppCompatActivity(R.layout.activity_main) {
+
+    private val viewModel by viewModels<PostViewModel>()
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -17,37 +21,13 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
         val binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        val post = Post(
-            id = 0L,
-            author = getString(R.string.post_title),
-            content = getString(R.string.postText),
-            link = getString(R.string.post_link),
-            published = getString(R.string.post_date),
-            likes = 999999,
-            shares = 199990
-        )
+        viewModel.data.observe(this) { post -> binding.render(post) }
 
-        binding.render(post)
         binding.like?.setOnClickListener {
-            post.likedByMe = !post.likedByMe
-            if (post.likedByMe) {
-                post.likes++
-                binding.likeCounter.text = numberFormat(post.likes)
-            } else {
-                post.likes--
-                if (post.likes > 0) binding.likeCounter.text = numberFormat(post.likes)
-                else {
-                    binding.likeCounter.text = null
-                }
-            }
-            binding.like.setImageResource(getLikeIconResId(post.likedByMe))
+            viewModel.onLikeClicked()
         }
         binding.share?.setOnClickListener {
-            post.sharedByMe = !post.sharedByMe
-            if (post.sharedByMe)
-                binding.share.setImageResource(getShareIconResId(post.sharedByMe))
-            post.shares++
-            binding.shareCounter.text = numberFormat(post.shares)
+            viewModel.onShareClicked()
         }
     }
 
@@ -58,7 +38,7 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
         postLink.text = post.link
         like.setImageResource(getLikeIconResId(post.likedByMe))
         share.setImageResource(getShareIconResId(post.sharedByMe))
-        if (post.likes > 0) likeCounter.text = numberFormat(post.likes)
+        likeCounter.text = numberFormat(post.likes)
         if (post.shares > 0) shareCounter.text = numberFormat(post.shares)
     }
 
