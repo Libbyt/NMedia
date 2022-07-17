@@ -24,7 +24,7 @@
         android:ellipsize="end"
         android:singleLine="true"
         app:layout_constraintBottom_toTopOf="@id/date"
-        app:layout_constraintEnd_toStartOf="@id/options"
+        app:layout_constraintEnd_toStartOf="@id/menu"
         app:layout_constraintStart_toEndOf="@+id/avatar"
         app:layout_constraintTop_toTopOf="@id/avatar"
         tools:text="@string/post_title" />
@@ -43,7 +43,7 @@
 
 
     <androidx.appcompat.widget.AppCompatImageButton
-        android:id="@+id/options"
+        android:id="@+id/menu"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:background="@android:color/transparent"
@@ -56,7 +56,7 @@
         android:layout_width="0dp"
         android:layout_height="0dp"
         app:barrierDirection="bottom"
-        app:constraint_referenced_ids="avatar, date, options" />
+        app:constraint_referenced_ids="avatar, date, menu" />
 
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/content"
@@ -67,20 +67,12 @@
         app:layout_constraintTop_toBottomOf="@id/header_barrier"
         tools:text="@string/postText" />
 
-    <androidx.appcompat.widget.AppCompatTextView
-        android:id="@+id/post_link"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:layout_constraintStart_toStartOf="@id/content"
-        app:layout_constraintTop_toBottomOf="@id/content"
-        tools:text="@string/post_link"/>
-
     <androidx.constraintlayout.widget.Barrier
         android:id="@+id/post_barrier"
         android:layout_width="0dp"
         android:layout_height="0dp"
         app:barrierDirection="bottom"
-        app:constraint_referenced_ids="content,post_link" />
+        app:constraint_referenced_ids="content" />
 
     <androidx.appcompat.widget.AppCompatImageButton
         android:id="@+id/like"

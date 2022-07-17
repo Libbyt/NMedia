@@ -2,20 +2,21 @@
     <string name="app_name" translatable="false">NMedia</string>
     <string name="nmedia">NMedia!</string>
     <string name="avatar_description">Author avatar</string>
-    <string name="postText"><![CDATA[Привет, это новая Нетология! Когда-то Нетология начиналась с интенсивов по онлайн маркетингу. Затем появились курсы по дизайну, разработке, аналитике и управлению. Мы растем сами и помогаем расти студентам: от новичков до уверенных профессионалов. Но самое важное остается с нами: Мы верим, что в каждом уже есть сила, которая заставляет хотеть больше, целиться выше, бежать быстрее. Наша миссия- помочь встать на путь роста и начать цепочку перемен -> ]]></string>
+    <string name="postText"><![CDATA[Привет, это новая Нетология! Когда-то Нетология начиналась с интенсивов по онлайн маркетингу. Затем появились курсы по дизайну, разработке, аналитике и управлению. Мы растем сами и помогаем расти студентам: от новичков до уверенных профессионалов. Но самое важное остается с нами: Мы верим, что в каждом уже есть сила, которая заставляет хотеть больше, целиться выше, бежать быстрее. Наша миссия- помочь встать на путь роста и начать цепочку перемен -> http://netolo.gy/fyb ]]></string>
     <string name="post_date">21 мая в 18:36</string>
     <string name="share_counter">5</string>
     <string name="view_counter" translatable="false">500</string>
     <string name="like_counter" translatable="false">10</string>
     <string name="post_title" translatable="false">Нетология. Университет интернет-профессий</string>
     <string name="post_link">http://netolo.gy/fyb</string>
-<!--    <string name="title_activity_main_plain" translatable="false">MainActivityPlain</string>-->
-    <!-- Strings used for fragments for navigation -->
-    <string name="first_fragment_label" translatable="false">First Fragment</string>
-    <string name="second_fragment_label" translatable="false">Second Fragment</string>
-    <string name="next" translatable="false">Next</string>
-    <string name="previous" translatable="false">Previous</string>
 
-    <string name="hello_first_fragment" translatable="false">Hello first fragment</string>
-    <string name="hello_second_fragment" translatable="false">Hello second fragment. Arg: %1$s</string>
+    <string name="description_post_author_avatar">Post author avatar</string>
+    <string name="description_post_menu">Post menu</string>
+    <string name="description_post_like">Like</string>
+    <string name="description_post_share">Share</string>
+    <string name="description_post_save">Save</string>
+    <string name="remove">Remove</string>
+    <string name="post_text">Post Text</string>
+    <string name="menu_edit">Edit</string>
+    <string name="error_empty_content">Content can\'t be empty</string>
 </resources>
