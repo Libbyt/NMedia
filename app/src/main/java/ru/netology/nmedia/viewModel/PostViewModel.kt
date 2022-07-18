@@ -41,6 +41,10 @@ class PostViewModel: ViewModel(), PostInteractionListener {
         currentPost.value = post
     }
 
+    fun onCancelClicked() {
+        currentPost.value = null
+    }
+
     //endregion PostInteractionListener
 
 }

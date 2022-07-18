@@ -37,8 +37,9 @@ class MainActivity : AppCompatActivity() {
             }
         }
         binding.contentCancelEditButton.setOnClickListener{
-            with(binding.contentEditText, ) {
+            with(binding.contentEditText) {
                 setText("")
+                viewModel.onCancelClicked()
                 hideKeyboard()
             }
             with(binding.group) {
