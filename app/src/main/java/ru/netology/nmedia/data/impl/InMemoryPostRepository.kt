@@ -1,46 +1,81 @@
 package ru.netology.nmedia.data.impl
 
-import android.annotation.SuppressLint
-import android.content.res.Resources
-import android.os.Build
-import androidx.annotation.RequiresApi
+
 import androidx.lifecycle.MutableLiveData
 import ru.netology.nmedia.Post
-import ru.netology.nmedia.R
 import ru.netology.nmedia.data.PostRepository
 
-class InMemoryPostRepository: PostRepository {
 
-     @SuppressLint("RestrictedApi", "ResourceType")
-     override val data = MutableLiveData<Post>(
-        Post(
-            id = 0L,
-            author = Resources.getSystem().getString(R.string.post_title),
-            content = Resources.getSystem().getString(R.string.postText),
-            link = Resources.getSystem().getString(R.string.post_link),
-            published = Resources.getSystem(). getString(R.string.post_date),
-            likes = 999,
-            shares = 995
-        )
-    )
+class InMemoryPostRepository : PostRepository {
 
-    @RequiresApi(Build.VERSION_CODES.R)
-    override fun like() {
-        val currentPost = checkNotNull(data.value) {"Data value should not be null"}
-        val likedPost = currentPost.copy(
-            likedByMe = !currentPost.likedByMe,
-            likes = if (currentPost.likedByMe) currentPost.likes-1
-            else currentPost.likes+1
-        )
-        data.value = likedPost
+    private var nextId = GENERATED_POSTS_AMOUNT.toLong()
+
+    private var posts
+        get() = checkNotNull(data.value)
+        set(value) {
+            data.value = value
+        }
+    override val data: MutableLiveData<List<Post>>
+
+    init {
+        val initialPosts = List(GENERATED_POSTS_AMOUNT) { index ->
+            Post(
+                id = index + 1L,
+                author = "Нетология",
+                content = "Контент поста №${index + 1}",
+                published = "Дата",
+                likes = 999,
+                shares = 995
+            )
+        }
+        data = MutableLiveData(initialPosts)
     }
-    override fun share() {
-        val currentPost = checkNotNull(data.value)
-        val sharedPost = currentPost.copy(
-            sharedByMe = if (!currentPost.sharedByMe) {!currentPost.sharedByMe}
-            else {currentPost.sharedByMe},
-            shares = currentPost.shares+1
-        )
-        data.value = sharedPost
+
+
+    override fun like(postId: Long) {
+        posts = posts.map { post ->
+            if (post.id == postId) post.copy(
+                likedByMe = !post.likedByMe,
+                likes = if (post.likedByMe) post.likes - 1 else post.likes + 1
+            )
+            else post
+        }
     }
+
+    override fun share(postId: Long) {
+        posts = posts.map { post ->
+            if (post.id == postId) post.copy(
+                sharedByMe = if (!post.sharedByMe) !post.sharedByMe else post.sharedByMe,
+                shares = post.shares + 1
+            )
+            else post
+        }
+    }
+
+    override fun delete(postId: Long) {
+        data.value = posts.filterNot{it.id == postId}
+
+    }
+
+    override fun save(post: Post) {
+        if (post.id == PostRepository.NEW_POST_ID) insert(post) else update(post)
+    }
+
+    private fun insert(post: Post) {
+        data.value = listOf(
+            post.copy(id = ++nextId)
+        ) + posts
+    }
+
+    private fun update(post: Post) {
+        data.value = posts.map {
+            if (it.id == post.id) post else it
+        }
+    }
+
+    private companion object{
+        const val GENERATED_POSTS_AMOUNT = 1000
+    }
+
+
 }

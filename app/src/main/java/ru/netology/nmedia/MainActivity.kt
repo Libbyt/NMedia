@@ -2,18 +2,19 @@ package ru.netology.nmedia
 
 import android.os.Build
 import android.os.Bundle
+import android.view.View
 import androidx.activity.viewModels
-import androidx.annotation.DrawableRes
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
+import ru.netology.nmedia.adapter.PostsAdapter
 import ru.netology.nmedia.databinding.ActivityMainBinding
+import ru.netology.nmedia.util.hideKeyboard
+import ru.netology.nmedia.util.showKeyboard
 import ru.netology.nmedia.viewModel.PostViewModel
 
 @RequiresApi(Build.VERSION_CODES.R)
-class MainActivity : AppCompatActivity(R.layout.activity_main) {
 
-    private val viewModel by viewModels<PostViewModel>()
-
+class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -21,33 +22,44 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
         val binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        viewModel.data.observe(this) { post -> binding.render(post) }
+        val viewModel: PostViewModel by viewModels()
 
-        binding.like?.setOnClickListener {
-            viewModel.onLikeClicked()
+        val adapter = PostsAdapter(viewModel)
+        binding.postRecyclerView.adapter = adapter
+        viewModel.data.observe(this) { posts ->
+            adapter.submitList(posts)
         }
-        binding.share?.setOnClickListener {
-            viewModel.onShareClicked()
+
+        binding.save.setOnClickListener {
+            with(binding.contentEditText) {
+                val content = text.toString()
+                viewModel.onSaveButtonClicked(content)
+            }
+        }
+        binding.contentCancelEditButton.setOnClickListener{
+            with(binding.contentEditText) {
+                setText("")
+                viewModel.onCancelClicked()
+                hideKeyboard()
+            }
+            with(binding.group) {
+                visibility = View.GONE
+            }
+        }
+        viewModel.currentPost.observe(this) {currentPost ->
+            with(binding.contentEditText){
+                val content = currentPost?.content
+                setText(content)
+                if (content != null) {
+                    requestFocus()
+                    showKeyboard()
+                }
+                else {
+                    clearFocus()
+                    hideKeyboard()
+                }
+            }
         }
     }
-
-    private fun ActivityMainBinding.render(post: Post) {
-        authorName.text = post.author
-        content.text = post.content
-        date.text = post.published
-        postLink.text = post.link
-        like.setImageResource(getLikeIconResId(post.likedByMe))
-        share.setImageResource(getShareIconResId(post.sharedByMe))
-        likeCounter.text = numberFormat(post.likes)
-        if (post.shares > 0) shareCounter.text = numberFormat(post.shares)
-    }
-
-    @DrawableRes
-    private fun getLikeIconResId(liked: Boolean) =
-        if (liked) R.drawable.ic_liked_24dp else R.drawable.ic_like_24dp
-
-    @DrawableRes
-    private fun getShareIconResId(shared: Boolean) =
-        if (shared) R.drawable.ic_shared_24dp else R.drawable.ic_share_24dp
 }
 
