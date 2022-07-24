@@ -6,7 +6,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.PopupMenu
-import androidx.annotation.DrawableRes
 import androidx.annotation.RequiresApi
 import androidx.constraintlayout.widget.Group
 import androidx.recyclerview.widget.DiffUtil
@@ -15,7 +14,7 @@ import androidx.recyclerview.widget.RecyclerView
 import ru.netology.nmedia.Post
 import ru.netology.nmedia.R
 import ru.netology.nmedia.databinding.PostListItemBinding
-import ru.netology.nmedia.numberFormat
+
 typealias OnPostClicked = (Post) -> Unit
 
 @RequiresApi(Build.VERSION_CODES.R)
@@ -44,6 +43,7 @@ class PostsAdapter(
         private lateinit var post: Post
 
         private val popupMenu by lazy {
+            val menu = binding.menu
             PopupMenu(itemView.context, binding.menu).apply {
                 inflate(R.menu.options_post)
                 setOnMenuItemClickListener {menuItem ->
@@ -61,6 +61,9 @@ class PostsAdapter(
                         else -> false
                     }
                 }
+                setOnDismissListener() {
+                    menu.isChecked = false
+                }
             }
         }
 
@@ -71,6 +74,11 @@ class PostsAdapter(
             binding.share.setOnClickListener {
                 listener.onShareClicked(post)
             }
+            binding.menu.addOnCheckedChangeListener { _, isChecked ->
+                if (isChecked) {
+                    popupMenu.show()
+                }
+            }
         }
 
         fun bind(post: Post) {
@@ -79,20 +87,19 @@ class PostsAdapter(
                 authorName.text = post.author
                 content.text = post.content
                 date.text = post.published
-                like.setImageResource(getLikeIconResId(post.likedByMe))
-                share.setImageResource(getShareIconResId(post.sharedByMe))
-                likeCounter.text = numberFormat(post.likes)
-                if (post.shares > 0) shareCounter.text = numberFormat(post.shares)
-                menu.setOnClickListener{popupMenu.show()}
+//                like.setButtonDrawable(getLikeIconResId(post.likedByMe))
+//                likeCounter.text = numberFormat(post.likes)
+                like.text = post.likes.toString()
+                like.isChecked = post.likedByMe
+                //TODO исправить потом аналогично для Share'а как у лайка
+                share.text = post.shares.toString()
+                share.isChecked = post.sharedByMe
+//                menu.isChecked = post.menuActive
+//                share.setImageResource (getShareIconResId(post.sharedByMe))
+//                if (post.shares > 0) shareCounter.text = numberFormat(post.shares)
+
             }
         }
-
-        @DrawableRes
-        private fun getLikeIconResId(liked: Boolean) =
-            if (liked) R.drawable.ic_liked_24dp else R.drawable.ic_like_24dp
-        @DrawableRes
-        private fun getShareIconResId(shared: Boolean) =
-            if (shared) R.drawable.ic_shared_24dp else R.drawable.ic_share_24dp
     }
 
     private object DiffCallback : DiffUtil.ItemCallback<Post>() {
